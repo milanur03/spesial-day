@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Anniversary Sayang!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink-soft: #ffdde1;
+            --pink-deep: #ee9ca7;
+            --text-color: #4a4a4a;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            scroll-behavior: smooth;
+            background: linear-gradient(to bottom, var(--pink-soft), var(--pink-deep));
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        h1 { font-family: 'Dancing Script', cursive; font-size: 3rem; margin-bottom: 10px; }
+        p { font-size: 1.1rem; line-height: 1.6; max-width: 600px; }
+
+        /* Musik Control */
+        #music-btn {
+            position: fixed; top: 20px; right: 20px; z-index: 1000;
+            background: rgba(255,255,255,0.7); border: none; padding: 10px; border-radius: 50%; cursor: pointer;
+        }
+
+        /* Halaman 2: Amplop */
+        .envelope-wrapper { cursor: pointer; font-size: 5rem; transition: transform 0.3s; }
+        .envelope-wrapper:hover { transform: scale(1.1); }
+        .heart-rain {
+            position: fixed; top: -10%; pointer-events: none;
+            animation: fall linear forwards; z-index: 999;
+        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+        /* Halaman 3: Foto */
+        .gallery { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+        .gallery img { width: 150px; height: 150px; object-fit: cover; border-radius: 15px; border: 5px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        /* Halaman 4: Pantun */
+        .floating-emoji { position: absolute; font-size: 2rem; animation: float 3s infinite ease-in-out; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        /* Halaman 6: Pesan */
+        #messageInput { width: 80%; padding: 10px; border-radius: 10px; border: none; margin-bottom: 10px; }
+        .btn-post { background: #ff4d6d; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
+        #board { margin-top: 20px; background: rgba(255,255,255,0.3); width: 80%; padding: 10px; border-radius: 10px; height: 100px; overflow-y: auto; }
+
+        .nav-hint { font-size: 0.8rem; margin-top: 20px; opacity: 0.7; }
+    </style>
+</head>
+<body>
+
+    <audio id="mySong" loop>
+        <source src="mencintaimu.mp3" type="audio/mp3">
+    </audio>
+    <button id="music-btn" onclick="toggleMusic()">🎵</button>
+
+    <section id="page1">
+        <h1>Happy 1st Anniversary</h1>
+        <p>Special gift for my favorite person.</p>
+        <div class="nav-hint">Scroll ke bawah ya..</div>
+    </section>
+
+    <section id="page2">
+        <div class="envelope-wrapper" onclick="burstHearts()">
+            📩
+            <p style="font-size: 1rem;">Klik amplopnya!</p>
+        </div>
+        <h2>Buka surat kecil dariku</h2>
+    </section>
+
+    <section id="page3">
+        <h1>Memory Lane</h1>
+        <p>Gak kerasa ya sudah 1 tahun. Ini adalah beberapa potret perjalanan kita yang selalu bikin aku senyum sendiri kalau lihatnya.</p>
+        <div class="gallery">
+            <img src="firstdate.jpg" alt="Kenangan 1">
+            <img src="fotomoment.jpg" alt="Kenangan 2">
+            <img src="firstdate.png" alt="Kenangan 3">
+        </div>
+    </section>
+
+    <section id="page4">
+        <div class="floating-emoji" style="top:20%; left:20%;">✨</div>
+        <div class="floating-emoji" style="bottom:20%; right:20%;">💖</div>
+        <div style="background: rgba(255,255,255,0.2); padding: 30px; border-radius: 20px;">
+            <p><i>"Bulan bersinar di malam yang tenang<br>
+            Bintang pun ikut menatap kala itu<br>
+            Cinta ini terus bertahan sayang<br>
+            Hingga akhir nanti tetap bersamamu"</i></p>
+        </div>
+    </section>
+
+    <section id="page5">
+        <h1>Teruntuk Kamu..</h1>
+        <p>Terima kasih sudah bertahan sejauh ini, terima kasih sudah sabar menghadapi aku dengan segala kurangnya. Semoga hubungan ini makin dewasa, makin kuat, dan makin penuh cinta. Semoga kita selalu jadi rumah satu sama lain. 🤍</p>
+        <p>Bukan soal berapa lamanya, tapi tentang bagaimana kita tetap memilih satu sama lain setiap harinya. Semoga Allah jaga hubungan ini sampai waktu yang terbaik nanti.</p>
+    </section>
+
+    <section id="page6">
+        <h1>Tinggalkan Pesan</h1>
+        <input type="text" id="messageInput" placeholder="Tulis sesuatu untukku...">
+        <button class="btn-post" onclick="postMessage()">Kirim Sayang</button>
+        <div id="board"></div>
+    </section>
+
+    <script>
+        const song = document.getElementById("mySong");
+        
+        function toggleMusic() {
+            if (song.paused) song.play();
+            else song.pause();
+        }
+
+        // Hati Berjatuhan
+        function burstHearts() {
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-rain';
+                    heart.innerHTML = '❤️';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 5000);
+                }, i * 50);
+            }
+        }
+
+        // Fitur Pesan Sederhana
+        function postMessage() {
+            const input = document.getElementById('messageInput');
+            const board = document.getElementById('board');
+            if (input.value.trim() !== "") {
+                const p = document.createElement('p');
+                p.innerHTML = `<b>Kamu:</b> ${input.value}`;
+                p.style.borderBottom = "1px dashed white";
+                board.prepend(p);
+                input.value = "";
+            }
+        }
+
+        // Auto play music on first interaction
+        document.body.addEventListener('click', () => {
+            song.play();
+        }, { once: true });
+    </script>
+</body>
+</html>
